@@ -4,10 +4,12 @@ import '../styles/Weather.css';
 import dayjs from 'dayjs';
 import TemperatureChart from './TemperatureChart';
 
-function Weather({ weatherData, cityName, onCityChange }) {
+function Weather({ weatherData, cityName, onCityChange}) {
     const [nextFiveDays, setNextFiveDays] = useState([]);
     const [selectedDay, setSelectedDay] = useState(null);
     const [selectedDayWeather, setSelectedDayWeather] = useState(null);
+  
+
 
     useEffect(() => {
         if (weatherData && weatherData.forecast && weatherData.forecast.forecastday.length > 0) {
@@ -22,6 +24,7 @@ function Weather({ weatherData, cityName, onCityChange }) {
         setSelectedDayWeather(selectedDayData);
     };
 
+
     return (
         <div className="row">
             <div className="col s12 m6 push-m3">
@@ -33,7 +36,7 @@ function Weather({ weatherData, cityName, onCityChange }) {
                         {selectedDayWeather && (
                             <>
                                 <span className="temperature">{selectedDayWeather.day.avgtemp_c}°</span>
-                                <div className="wind">Vent {selectedDayWeather.day.maxwind_kph} km/h ({selectedDayWeather.day.wind_dir})</div>
+                                <div className="wind">Vent {selectedDayWeather.day.maxwind_kph} km/h ({selectedDayWeather.day.maxtemp_c}°)</div>
                                 {/* Afficher d'autres données météorologiques selon vos besoins */}
                                 <TemperatureChart temperatures={selectedDayWeather.hour.map(hour => hour.temp_c)} />
                             </>
@@ -42,6 +45,7 @@ function Weather({ weatherData, cityName, onCityChange }) {
                     <Days nextFiveDays={nextFiveDays} onDayClick={handleDayClick} selectedDay={selectedDay} />
                 </div>
             </div>
+            
         </div>
     );
 }
