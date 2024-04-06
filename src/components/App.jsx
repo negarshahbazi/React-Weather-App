@@ -9,7 +9,23 @@ const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 function App() {
   const [cityName, setCityName] = useState('');
   const [weatherData, setWeatherData] = useState(null);
+  const [selectedCities, setSelectedCities] = useState([]);
 
+  /////////////////////////////////////////////////////////////////////////////////
+  useEffect(() => {
+    // Récupérer les villes depuis le localStorage lors du chargement de l'application
+    const storedCities = localStorage.getItem('selectedCities');
+    if (storedCities) {
+      setSelectedCities(JSON.parse(storedCities));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Mettre à jour le localStorage lorsque les villes sélectionnées changent
+    localStorage.setItem('selectedCities', JSON.stringify(selectedCities));
+  }, [selectedCities]);
+
+//////////////////////////////////////////////////////////////////////:
 
   useEffect(() => {
     const fetchWeatherData = async (city) => {
@@ -49,13 +65,22 @@ function App() {
 
 
   const handleCityInputChange = (event) => {
+    
     setCityName(event.target.value);
   };
-
+  //////////////////////////////////////////////////////////////////////
+  const handleRemoveCity = (city) => {
+    // Supprimer la ville de la liste des villes sélectionnées
+    setSelectedCities(selectedCities.filter(selectedCity => selectedCity !== city));
+  };
 
   const handleCityClick = (city) => {
+    // Ajouter la ville sélectionnée à la liste des villes
+    setSelectedCities([...selectedCities, city]);
+
     setCityName(city);
   };
+  /////////////////////////////////////////////////////////////////////////////
 
   return (
     <div className="App">
@@ -65,6 +90,7 @@ function App() {
         cityName={cityName}
         onCityChange={handleCityInputChange}
         onCityClick={handleCityClick}
+        selectedCities={selectedCities}
       />
     </div>
   );
